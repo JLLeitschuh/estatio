@@ -95,7 +95,7 @@ public enum LeaseItemForTurnoverRent_enum implements PersonaWithFinder<LeaseItem
                         Arrays.stream(termSpecs)
                                 .map(x -> new LeaseTermForTurnoverRentBuilder.TermSpec(
                                         x.startDate, x.endDate, x.leaseTermFrequency,
-                                        x.turnoverRentRule))
+                                        x.turnoverRentRule, null))
                                 .collect(Collectors.toList())))
                 ;
     }

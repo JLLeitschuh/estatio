@@ -35,8 +35,8 @@ import org.estatio.module.lease.dom.LeaseItemRepository;
 import org.estatio.module.lease.dom.LeaseTermFrequency;
 import org.estatio.module.lease.fixtures.lease.enums.Lease_enum;
 import org.estatio.module.lease.fixtures.leaseitems.builders.LeaseItemForDiscountBuilder;
-import org.estatio.module.lease.fixtures.leaseitems.builders.LeaseItemForTurnOverRentFixedBuilder;
-import org.estatio.module.lease.fixtures.leaseitems.builders.LeaseTermForFixedBuilder;
+import org.estatio.module.lease.fixtures.leaseitems.builders.LeaseItemForTurnOverRentSweBuilder;
+import org.estatio.module.lease.fixtures.leaseitems.builders.LeaseTermForTurnoverRentBuilder;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,15 +48,15 @@ import static org.incode.module.base.integtests.VT.bi;
 @AllArgsConstructor()
 @Getter
 @Accessors(chain = true)
-public enum LeaseItemForTurnoverRentFixed_enum implements PersonaWithFinder<LeaseItem>, PersonaWithBuilderScript<LeaseItem, LeaseItemForTurnOverRentFixedBuilder> {
+public enum LeaseItemForTurnoverRentSwe_enum implements PersonaWithFinder<LeaseItem>, PersonaWithBuilderScript<LeaseItem, LeaseItemForTurnOverRentSweBuilder> {
 
     HanPoison001Se(Lease_enum.HanPoison001Se, bi(1), LeaseItemForRent_enum.HanPoison001Se,
         new TermSpec[]{
-            new TermSpec(Lease_enum.HanPoison001Se.getStartDate(), null, null, bd(20000))
+            new TermSpec(Lease_enum.HanPoison001Se.getStartDate(), null, null, "7", bd(20000))
         }),
     HanTopModel002Se(Lease_enum.HanTopModel002Se, bi(1), LeaseItemForRent_enum.HanTopModel002Se,
         new TermSpec[]{
-            new TermSpec(Lease_enum.HanTopModel002Se.getStartDate(), null, null, bd(2000))
+            new TermSpec(Lease_enum.HanTopModel002Se.getStartDate(), null, null, "1.23", bd(2000))
         })
     ;
 
@@ -71,17 +71,18 @@ public enum LeaseItemForTurnoverRentFixed_enum implements PersonaWithFinder<Leas
         LocalDate startDate;
         LocalDate endDate;
         LeaseTermFrequency leaseTermFrequency;
+        String turnoverRentRule;
         BigDecimal value;
     }
 
     @Override
-    public LeaseItemForTurnOverRentFixedBuilder builder() {
-        return new LeaseItemForTurnOverRentFixedBuilder()
+    public LeaseItemForTurnOverRentSweBuilder builder() {
+        return new LeaseItemForTurnOverRentSweBuilder()
                 .setPrereq((f,ec) -> f.setLease(f.objectFor(lease_d, ec)))
                 .setSequence(sequence)
                 .setPrereq((f,ec) -> f.setTermSpecs(
                         Arrays.stream(termSpecs)
-                                .map(x -> new LeaseTermForFixedBuilder.TermSpec(x.startDate, x.endDate, x.leaseTermFrequency, x.value))
+                                .map(x -> new LeaseTermForTurnoverRentBuilder.TermSpec(x.startDate, x.endDate, x.leaseTermFrequency, x.turnoverRentRule,x.value))
                                 .collect(Collectors.toList())
                         ))
                 ;

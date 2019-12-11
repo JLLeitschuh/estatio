@@ -37,6 +37,7 @@ import org.estatio.module.lease.dom.LeaseItem;
 import org.estatio.module.lease.dom.LeaseItemStatus;
 import org.estatio.module.lease.dom.LeaseItemType;
 import org.estatio.module.lease.dom.LeaseTermForFixed;
+import org.estatio.module.lease.dom.LeaseTermForTurnoverRent;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -47,9 +48,10 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(of={"lease","sequence"}, callSuper = false)
 @ToString(of={"lease","sequence"})
 @Accessors(chain = true)
-public class LeaseItemForTurnOverRentFixedBuilder extends BuilderScriptAbstract<LeaseItem, LeaseItemForTurnOverRentFixedBuilder> {
+public class LeaseItemForTurnOverRentSweBuilder
+        extends BuilderScriptAbstract<LeaseItem, LeaseItemForTurnOverRentSweBuilder> {
 
-    public static final LeaseItemType LEASE_ITEM_TYPE = LeaseItemType.TURNOVER_RENT_FIXED;
+    public static final LeaseItemType LEASE_ITEM_TYPE = LeaseItemType.TURNOVER_RENT;
     private static final InvoicingFrequency INVOICING_FREQUENCY = InvoicingFrequency.YEARLY_IN_ARREARS;
 
     @Getter @Setter Lease lease;
@@ -60,10 +62,10 @@ public class LeaseItemForTurnOverRentFixedBuilder extends BuilderScriptAbstract<
     @Getter @Setter PaymentMethod paymentMethod;
     @Getter @Setter LeaseItemStatus status;
 
-    @Getter @Setter List<LeaseTermForFixedBuilder.TermSpec> termSpecs = Lists.newArrayList();
+    @Getter @Setter List<LeaseTermForTurnoverRentBuilder.TermSpec> termSpecs = Lists.newArrayList();
 
     @Getter LeaseItem object;
-    @Getter List<LeaseTermForFixed> terms = Lists.newArrayList();
+    @Getter List<LeaseTermForTurnoverRent> terms = Lists.newArrayList();
 
     @Override
     protected void execute(final ExecutionContext ec) {
@@ -88,13 +90,14 @@ public class LeaseItemForTurnOverRentFixedBuilder extends BuilderScriptAbstract<
             .build(this, ec)
             .getObject();
 
-        for (LeaseTermForFixedBuilder.TermSpec termSpec : termSpecs) {
-            final LeaseTermForFixed term = new LeaseTermForFixedBuilder()
+        for (LeaseTermForTurnoverRentBuilder.TermSpec termSpec : termSpecs) {
+            final LeaseTermForTurnoverRent term = new LeaseTermForTurnoverRentBuilder()
                     .setLeaseItem(leaseItem)
                     .setStartDate(termSpec.startDate)
                     .setEndDate(termSpec.endDate)
                     .setLeaseTermFrequency(termSpec.leaseTermFrequency)
-                    .setValue(termSpec.value)
+                    .setManualTurnoverRentValue(termSpec.manualTurnoverRentValue)
+                    .setTurnoverRentRule(termSpec.turnoverRentRule)
                     .build(this, ec)
                     .getObject();
             terms.add(term);

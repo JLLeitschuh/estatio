@@ -18,6 +18,8 @@
  */
 package org.estatio.module.lease.fixtures.leaseitems.builders;
 
+import java.math.BigDecimal;
+
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
@@ -47,6 +49,8 @@ public class LeaseTermForTurnoverRentBuilder
 
     @Getter @Setter String turnoverRentRule;
 
+    @Getter @Setter BigDecimal manualTurnoverRentValue;
+
     @Getter @Setter LeaseTermFrequency leaseTermFrequency;
 
     @Getter LeaseTermForTurnoverRent object;
@@ -58,6 +62,7 @@ public class LeaseTermForTurnoverRentBuilder
         LocalDate endDate;
         LeaseTermFrequency leaseTermFrequency;
         String turnoverRentRule;
+        BigDecimal manualTurnoverRentValue;
     }
 
     @Override
@@ -78,6 +83,7 @@ public class LeaseTermForTurnoverRentBuilder
 
         leaseTerm.setFrequency(LeaseTermFrequency.YEARLY);
         leaseTerm.setTurnoverRentRule(turnoverRentRule);
+        leaseTerm.setManualTurnoverRent(manualTurnoverRentValue);
 
         ec.addResult(this, leaseTerm);
 
